@@ -14,28 +14,38 @@ const initialColumns: ColumnType[] = [
             { id: 'card2', title: 'Tarea 2', description: 'Descripción de la tarea 2' },
             { id: 'card3', title: 'Tarea 3', description: 'Descripción de la tarea 3' },
             { id: 'card4', title: 'Tarea 4', description: 'Descripción de la tarea 4' },
-            { id: 'card5', title: 'Tarea 5', description: 'Descripción de la tarea 5' },
-            { id: 'card6', title: 'Tarea 6', description: 'Descripción de la tarea 6' }
+            { id: 'card5', title: 'Tarea 5', description: 'Descripción de la tarea 1' },
+            { id: 'card6', title: 'Tarea 6', description: 'Descripción de la tarea 2' },
+            { id: 'card7', title: 'Tarea 7', description: 'Descripción de la tarea 3' },
+            { id: 'card8', title: 'Tarea 8', description: 'Descripción de la tarea 4' },
         ]
     }
 ];
 
 const Board = () => {
     const [columns, setColumns] = useState<ColumnType[]>(initialColumns);
+    const [activeColumn, setActiveColumn] = useState<string | null>(null); // Estado global para controlar el formulario activo.
 
     const handleAddList = (listName: string) => {
-        // Generar un nuevo ID para la columna
-        const newColumnId = (columns.length + 1).toString();
+        const newColumnId = (columns.length + 1).toString(); // Generar un ID único para la nueva columna.
 
-        // Crear la nueva columna
         const newColumn: ColumnType = {
             id: newColumnId,
             title: listName,
             cards: []
         };
 
-        // Agregar la nueva columna al estado
-        setColumns([...columns, newColumn]);
+        setColumns([...columns, newColumn]); // Agregar la nueva columna al estado.
+    };
+
+    const handleAddCard = (columnId: string, newCard: CardType) => {
+        setColumns((prevColumns) =>
+            prevColumns.map((column) =>
+                column.id === columnId
+                    ? { ...column, cards: [...column.cards, newCard] }
+                    : column
+            )
+        );
     };
 
     return (
@@ -49,6 +59,9 @@ const Board = () => {
                     <Column
                         key={column.id}
                         item={column}
+                        onAddCard={handleAddCard}
+                        isAddingCard={activeColumn === column.id} // Compara si esta columna es la activa.
+                        setActiveColumn={setActiveColumn} // Permite cambiar la columna activa.
                     />
                 ))}
                 <ButtonAddList onAddList={handleAddList} />
@@ -57,4 +70,4 @@ const Board = () => {
     );
 };
 
-export default Board; 
+export default Board;

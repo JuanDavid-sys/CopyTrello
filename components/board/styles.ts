@@ -1,4 +1,4 @@
-import { StyleSheet, Platform, ViewStyle } from 'react-native';
+import { StyleSheet, Platform, ViewStyle, Dimensions } from 'react-native';
 
 export const styles = StyleSheet.create({
     mainContainer: {
@@ -10,36 +10,18 @@ export const styles = StyleSheet.create({
         alignItems: 'flex-start',
         minHeight: '100%',
     },
-    column: {
-        width: 270,
-        backgroundColor: '#101204',
-        marginHorizontal: 8,
-        borderRadius: 12,
-        padding: 12,
-        alignSelf: 'flex-start',
-    },
-    columnHeader: {
+    addCardFooterButton: {
+        position: 'absolute', // Fija el botón al pie de la columna.
+        bottom: 12,
+        left: 12,
+        right: 12,
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 12,
-    },
-    columnTitle: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#FFFFFF',
-    },
-    cardCount: {
-        backgroundColor: '#404040',
-        color: '#FFFFFF',
-        paddingHorizontal: 8,
+        borderRadius: 999,
+        paddingHorizontal: 4,
         paddingVertical: 2,
-        borderRadius: 10,
-        fontSize: 12,
-    },
-    columnContent: {
-        paddingVertical: 10,
-        maxHeight: '100%',
+        backgroundColor: '#404040',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     card: {
         backgroundColor: '#22272b',
@@ -70,19 +52,10 @@ export const styles = StyleSheet.create({
     cardTitle: {
         fontWeight: 'bold',
         marginBottom: 4,
-        color: '#FFFFFF',
+        color: '#B6C2CF',
     },
     cardDescription: {
         color: '#B3B3B3',
         fontSize: 12,
     },
-    addCardButton: {
-        flexDirection: 'row',
-        borderRadius: 999,
-        paddingHorizontal: 4,
-        paddingVertical: 2,
-    },
-    addCardButtonText: {
-        color: 'white',
-    },
-}); 
+});
