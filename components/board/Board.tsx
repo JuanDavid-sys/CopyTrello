@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, ScrollView } from 'react-native';
 import { Column } from './Column';
 import { Column as ColumnType, Card as CardType } from './types';
 import { styles } from './styles';
 import ButtonAddList from './ButtonAddList';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const initialColumns: ColumnType[] = [
     {
@@ -23,11 +24,43 @@ const initialColumns: ColumnType[] = [
 ];
 
 const Board = () => {
-    const [columns, setColumns] = useState<ColumnType[]>(initialColumns);
-    const [activeColumn, setActiveColumn] = useState<string | null>(null); // Estado global para controlar el formulario activo.
+    const [columns, setColumns] = useState<ColumnType[]>([]);
+    const [activeColumn, setActiveColumn] = useState<string | null>(null);
+
+    useEffect(() => {
+        const loadColumns = async () => {
+            try {
+                const savedColumns = await AsyncStorage.getItem('columns');
+                if (savedColumns) {
+                    setColumns(JSON.parse(savedColumns));
+                }
+            } catch (error) {
+                console.error('Error loading columns from AsyncStorage:', error);
+            }
+        };
+
+        loadColumns();
+    }, []);
+
+    useEffect(() => {
+        const saveColumns = async () => {
+            try {
+                await AsyncStorage.setItem('columns', JSON.stringify(columns));
+            } catch (error) {
+                console.error('Error saving columns to AsyncStorage:', error);
+            }
+        };
+
+        saveColumns();
+    }, [columns]);
+
+    // Función para eliminar una columna
+    const removeColumn = (columnId: string) => {
+        setColumns((prevColumns) => prevColumns.filter((column) => column.id !== columnId));
+    };
 
     const handleAddList = (listName: string) => {
-        const newColumnId = (columns.length + 1).toString(); // Generar un ID único para la nueva columna.
+        const newColumnId = (columns.length + 1).toString();
 
         const newColumn: ColumnType = {
             id: newColumnId,
@@ -35,19 +68,27 @@ const Board = () => {
             cards: []
         };
 
-        setColumns([...columns, newColumn]); // Agregar la nueva columna al estado.
+        setColumns([...columns, newColumn]);
     };
 
     const handleAddCard = (columnId: string, newCard: CardType) => {
         setColumns((prevColumns) =>
-            prevColumns.map((column) =>
-                column.id === columnId
-                    ? { ...column, cards: [...column.cards, newCard] }
-                    : column
-            )
+          prevColumns.map((column) =>
+            column.id === columnId
+              ? { ...column, cards: [...column.cards, newCard] }
+              : { ...column }
+          )
         );
-    };
-
+      };
+      
+      const handleUpdateColumn = (columnId: string, updatedColumn: ColumnType) => {
+        setColumns((prevColumns) =>
+          prevColumns.map((column) =>
+            column.id === columnId ? { ...updatedColumn } : { ...column }
+          )
+        );
+      };      
+    
     return (
         <View style={styles.mainContainer}>
             <ScrollView
@@ -60,8 +101,10 @@ const Board = () => {
                         key={column.id}
                         item={column}
                         onAddCard={handleAddCard}
-                        isAddingCard={activeColumn === column.id} // Compara si esta columna es la activa.
-                        setActiveColumn={setActiveColumn} // Permite cambiar la columna activa.
+                        onUpdateColumn={handleUpdateColumn} // Pasar la función aquí
+                        isAddingCard={activeColumn === column.id}
+                        setActiveColumn={setActiveColumn}
+                        removeColumn={removeColumn}
                     />
                 ))}
                 <ButtonAddList onAddList={handleAddList} />
@@ -69,5 +112,6 @@ const Board = () => {
         </View>
     );
 };
+
 
 export default Board;

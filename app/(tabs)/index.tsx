@@ -2,8 +2,10 @@ import { StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Board from '../../components/board/Board';
 import { Header } from '../../components/board/Header';
+import { InfoCard } from '../../components/board/InfoCard';
 
 export default function HomeScreen() {
+  
   return (
     <LinearGradient
       colors={['#8B0076','#4B0082']}
@@ -11,6 +13,7 @@ export default function HomeScreen() {
       start={{ x: 1, y: 0 }}
       end={{ x: 0, y: 1 }}
     >
+      <InfoCard />
       <Header />
       <Board />
     </LinearGradient>
