@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Dispatch } from "react";
 import {
   View,
   Text,
@@ -22,6 +22,7 @@ interface ColumnProps {
   isAddingCard: boolean;
   setActiveColumn: (columnId: string | null) => void;
   removeColumn: (columnId: string) => void;
+  openModal: (card: CardType) => void;
 }
 
 export const Column = ({
@@ -31,6 +32,7 @@ export const Column = ({
   isAddingCard,
   setActiveColumn,
   removeColumn,
+  openModal,
 }: ColumnProps) => {
   const [newCardTitle, setNewCardTitle] = useState("");
   const newCardInputRef = useRef<TextInput>(null);
@@ -103,6 +105,7 @@ export const Column = ({
               const updatedColumn = { ...item, cards: updatedCards };
               onUpdateColumn(item.id, updatedColumn);
             }}
+            onPress={() => openModal(card)}
           />
         )}
         keyExtractor={(card) => card.id}
@@ -154,7 +157,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: 270,
     borderWidth: 1,
-    padding: 12,
+    padding: 9,
     backgroundColor: "#101204",
     marginHorizontal: 8,
     borderRadius: 12,
@@ -173,6 +176,8 @@ const styles = StyleSheet.create({
   },
   flatList: {
     flexGrow: 0,
+    scrollbarColor: '#09f black',
+    scrollbarWidth: 'thin',
   },
   columnFooter: {
     flex: 0,
@@ -219,3 +224,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+
+export default Column;

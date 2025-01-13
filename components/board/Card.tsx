@@ -6,22 +6,21 @@ import { DescriptionIcon, Cancelicon } from '../Icons';
 interface CardProps {
     item: CardType;
     onDeleteCard: (cardId: string) => void; // Nueva prop para manejar la eliminación
+    onPress: () => void; // Add onPress to the interface
 }
 
-export const Card = ({ item: card, onDeleteCard }: CardProps) => {
-    const [isHovered, setIsHovered] = useState(false);
+export const Card = ({ item: card, onDeleteCard, onPress }: CardProps) => {
 
     return (
         <Pressable 
-            onPressIn={() => setIsHovered(true)} // Activa el hover al presionar el botón
-            onPressOut={() => setIsHovered(false)} // Desactiva el hover al soltar el botón
-            style={[styles.card, isHovered && styles.buttonHovered,]}>
+            onPress={onPress}
+            style={[styles.card]}>
 
             <View style={styles.cardContent}>
                 <Text style={styles.cardTitle} numberOfLines={1}>
                     {card.title}
                 </Text>
-                <Pressable>
+                <Pressable style={styles.IconDescriptio}>
                     <DescriptionIcon color="#B6C2CF" />
                 </Pressable>
             </View>
@@ -70,8 +69,7 @@ const styles = StyleSheet.create({
     DeleteCardButton: {
         flexShrink: 0, // Evita que se reduzca el botón
     },
-    buttonHovered: {
-        borderColor: 'white',
+    IconDescriptio: {
+        width: 32,
     },
 });
-

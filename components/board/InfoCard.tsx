@@ -1,11 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { TouchableOpacity, Text, Pressable, StyleSheet, View, Dimensions, Platform } from 'react-native';
 import { DescriptionIcon, Cancelicon, CardIcon, EyeIcon } from '../Icons';
 
 export const InfoCard = () => {
-  const [isVisible, setIsVisible] = useState(true);
-  if (!isVisible) return null; // No renderizar si está oculto
-
   const { width: screenWidth } = Dimensions.get("window");
 
   // Determinar el ancho dinámico
@@ -19,7 +16,7 @@ export const InfoCard = () => {
             <CardIcon style={styles.LeftIcons} />
 
             <View>
-              <Text style={[styles.HeaderText, styles.Title]}>Titulo</Text>
+              <Text style={[styles.HeaderText, styles.Title]}>Título</Text>
               <View style={styles.ContentOptionsList}>
                 <Text style={[styles.HeaderText]}>
                   En la Lista
@@ -31,7 +28,7 @@ export const InfoCard = () => {
             </View>
           </View>
 
-          <Pressable onPress={() => setIsVisible(false)}>
+          <Pressable onPress={() => {}}>
             <Cancelicon style={[styles.LeftIcons, { marginRight: 0 }]} />
           </Pressable>
         </View>

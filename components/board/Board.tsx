@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, StyleSheet } from 'react-native';
 import { Column } from './Column';
 import { Column as ColumnType, Card as CardType } from './types';
-import { styles } from './styles';
 import ButtonAddList from './ButtonAddList';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ModalComponent from './ModalComponent';
 
 const initialColumns: ColumnType[] = [
     {
@@ -26,6 +26,20 @@ const initialColumns: ColumnType[] = [
 const Board = () => {
     const [columns, setColumns] = useState<ColumnType[]>([]);
     const [activeColumn, setActiveColumn] = useState<string | null>(null);
+
+    const [selectedCard, setSelectedCard] = useState<CardType | null>(null);
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const openModal = (card: CardType) => {
+        setSelectedCard(card);
+        setModalVisible(true);
+    };
+
+    // Función para cerrar el modal
+    const closeModal = () => {
+        setSelectedCard(null);
+        setModalVisible(false);
+    };
 
     useEffect(() => {
         const loadColumns = async () => {
@@ -105,13 +119,32 @@ const Board = () => {
                         isAddingCard={activeColumn === column.id}
                         setActiveColumn={setActiveColumn}
                         removeColumn={removeColumn}
+                        openModal={openModal}
                     />
                 ))}
                 <ButtonAddList onAddList={handleAddList} />
             </ScrollView>
+
+            <ModalComponent 
+            visible={modalVisible} 
+            onClose={closeModal} 
+            cardTitle={selectedCard?.title || null} 
+        />
         </View>
     );
 };
 
+const styles = StyleSheet.create({
+    mainContainer: {
+        flex: 1,
+    },
+    container: {
+        padding: 10,
+        paddingBottom: 20,
+        alignItems: 'flex-start',
+        minHeight: '100%',
+    },
+
+});
 
 export default Board;
